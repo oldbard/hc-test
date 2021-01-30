@@ -8,10 +8,18 @@ namespace Gameplay.Controllers
     {
         const string AnimRun = "runStart";
         const string AnimMoving = "Moving";
+        const string AnimDead = "Dead";
+        const string AnimDance = "Dance";
 
         [SerializeField] Animator _animator;
         [SerializeField] InputHandler _inputHandler;
         [SerializeField] float _moveSpeed;
+
+        int _id;
+        public int Id
+        {
+            get => _id;
+        }
 
         Transform _transform;
         Vector3 _targetNodePos;
@@ -29,8 +37,9 @@ namespace Gameplay.Controllers
             _transform = transform;            
         }
 
-        void Start()
+        public void Init(int id)
         {
+            _id = id;
             RegisterEvents();
         }
 
@@ -63,22 +72,38 @@ namespace Gameplay.Controllers
 
         void OnPressedHit()
         {
+            StartRunning();
+        }
+
+        void OnReleasedHit()
+        {
+            StopRunning();
+        }
+
+        void StartRunning()
+        {
             _moving = true;
             _animator.Play(Animator.StringToHash(AnimRun));
             _animator.SetBool(Animator.StringToHash(AnimMoving), true);
         }
 
-        void OnReleasedHit()
+        void StopRunning()
         {
-            //_animator.StopPlayback();
-            _animator.SetBool(Animator.StringToHash(AnimMoving), false);
             _moving = false;
+            _animator.SetBool(Animator.StringToHash(AnimMoving), false);
         }
 
         public void SetTargetNode(Vector3 nodePos)
         {
             UpdateCheckPointPos();
             _targetNodePos = nodePos;
+        }
+
+        public void CompletedRun()
+        {
+            StopRunning();
+            UnregisterEvents();
+            _animator.SetTrigger(AnimDance);
         }
 
         void UpdateCheckPointPos()

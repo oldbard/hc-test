@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 namespace Gameplay.Objects
 {
     public class BouncyObject : Obstacle
     {
-        [SerializeField] float _moveDistance;
-        [SerializeField] float _moveSpeed;
+        [SerializeField] float _moveDistance = 0f;
+        [SerializeField] float _moveSpeed = 0f;
         [SerializeField] Vector3 _initialDirection = Vector3.right;
 
         Transform _transform;

@@ -1,27 +1,44 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Gameplay.Controllers
 {
     public class PathManager : MonoBehaviour
     {
-        [SerializeField] Transform[] _pathNodes;
-
-        int _currentTarget = 0;
-
-        public Vector3 CurrentTargetPos
+        [Serializable]
+        class PathNodes
         {
-            get => _pathNodes[_currentTarget].transform.position;
+            [SerializeField] Transform[] _nodes;
+
+            public int Length
+            {
+                get => _nodes.Length;
+            }
+
+            public Transform GetNode(int id)
+            {
+                return _nodes[id];
+            }
         }
 
-        public bool IsLastTarget
+        [SerializeField] PathNodes[] _pathNodes;
+
+        int[] _currentTarget = new int[2];
+
+        public Vector3 CurrentTargetPos(int playerId)
         {
-            get => _currentTarget == _pathNodes.Length - 1;
+            return _pathNodes[playerId].GetNode(_currentTarget[playerId]).position;
         }
 
-        public void SkipToNextTarget()
+        public bool IsLastTarget(int playerId)
         {
-            _currentTarget++;
-            if (_currentTarget >= _pathNodes.Length)
+            return _currentTarget[playerId] == _pathNodes[playerId].Length - 1;
+        }
+
+        public void SkipToNextTarget(int playerId)
+        {
+            _currentTarget[playerId]++;
+            if (_currentTarget[playerId] >= _pathNodes[playerId].Length)
             {
                 throw new System.Exception("Ops! Level should have ended!");
             }
@@ -29,12 +46,18 @@ namespace Gameplay.Controllers
 
         void OnDrawGizmos()
         {
-            for (var i = 0; i < _pathNodes.Length; i++)
-            {
-                var node = _pathNodes[i];
+            if(!Application.isPlaying) return;
 
-                Gizmos.color = i == _currentTarget ? Color.green : Color.blue;
-                Gizmos.DrawSphere(node.transform.position, 1f);
+            for(var i = 0; i < _pathNodes.Length; i++)
+            {
+                var playerNodes = _pathNodes[i];
+
+                for(var j = 0; j < playerNodes.Length; j++)
+                {
+                    var node = playerNodes.GetNode(j);
+                    Gizmos.color = j == _currentTarget[i] ? Color.green : Color.blue;
+                    Gizmos.DrawSphere(node.transform.position, 1f);
+                }
             }
         }
     }

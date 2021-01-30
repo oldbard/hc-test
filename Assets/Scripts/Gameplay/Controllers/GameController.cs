@@ -4,38 +4,57 @@ namespace Gameplay.Controllers
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] PlayerController _player;
+        [SerializeField] PlayerController[] _players;
         [SerializeField] PathManager _pathManager;
         [SerializeField] float _distanceToChangeNode = 0.3f;
 
+        bool _levelIsRunning;
+
         void Start()
         {
-            UpdatePlayerTarget();
+            _levelIsRunning = true;
+            for (var i = 0; i < _players.Length; i++)
+            {
+                var player = _players[i];
+                
+                player.Init(i);
+                UpdatePlayerTarget(player);
+            }
         }
 
         void Update()
         {
-            var diff = _player.Position - _pathManager.CurrentTargetPos;
+            if(!_levelIsRunning) return;
 
-            //        Debug.Log($"Distance: {diff.sqrMagnitude}, Distance to Change: {_distanceToChangeNode * _distanceToChangeNode}");
+            foreach(var player in _players)
+            {
+                UpdatePlayerPath(player);
+            }
+        }
+
+        void UpdatePlayerPath(PlayerController player)
+        {
+            var diff = player.Position - _pathManager.CurrentTargetPos(player.Id);
 
             if (diff.sqrMagnitude <= _distanceToChangeNode * _distanceToChangeNode)
             {
-                if (_pathManager.IsLastTarget)
+                if (_pathManager.IsLastTarget(player.Id))
                 {
+                    _levelIsRunning = false;
                     Debug.Log("Reached destination!");
+                    player.CompletedRun();
                 }
                 else
                 {
-                    _pathManager.SkipToNextTarget();
-                    UpdatePlayerTarget();
+                    _pathManager.SkipToNextTarget(player.Id);
+                    UpdatePlayerTarget(player);
                 }
             }
         }
 
-        void UpdatePlayerTarget()
+        void UpdatePlayerTarget(PlayerController player)
         {
-            _player.SetTargetNode(_pathManager.CurrentTargetPos);
+            player.SetTargetNode(_pathManager.CurrentTargetPos(player.Id));
         }
     }
 }
