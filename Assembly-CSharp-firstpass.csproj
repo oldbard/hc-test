@@ -68,15 +68,24 @@
     <Compile Include="Assets\Plugins\MobileDepthWater\Scripts\Water\WaterArea.cs" />
     <Compile Include="Assets\Plugins\MobileDepthWater\Scripts\Water\WaterMaterialSwitcher.cs" />
     <Compile Include="Assets\Plugins\MobileDepthWater\Scripts\Water\WaterPropertyBlockSetter.cs" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\CurvedRotation.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterTwoSide\Depth\DiffuseDepthWaterTwoSide.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Link.xml" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\VertexColor.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterOpaque\Height\DiffuseColorHeightWater.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\CurvedCode.cginc" />
     <None Include="Assets\Plugins\SimpleSky\ReadMe.txt" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterTwoSide\Height\DiffuseColorHeightWaterTwoSide.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterOpaque\Depth\DiffuseDepthWater.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterTwoSide\Height\DiffuseHeightWaterTwoSide.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterTwoSide\Depth\DiffuseColorDepthWaterTwoSide.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\CurvedUnlit.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\INSTRUCTIONS.txt" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\CurvedUnlitCloud.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterOpaque\Height\DiffuseHeightWater.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\UnlitBlinking.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterOpaque\Depth\DiffuseColorDepthWater.shader" />
+    <None Include="Assets\Plugins\UnityEndlessRunner\Shaders\CurvedUnlitAlpha.shader" />
     <None Include="Assets\Plugins\MobileDepthWater\Shaders\WaterOpaque\DiffuseWaterOpaque.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/repoNew/hc-test/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

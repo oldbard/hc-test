@@ -6,6 +6,10 @@ namespace Gameplay.Controllers
 {
     public class PlayerController : MonoBehaviour
     {
+        const string AnimRun = "runStart";
+        const string AnimMoving = "Moving";
+
+        [SerializeField] Animator _animator;
         [SerializeField] InputHandler _inputHandler;
         [SerializeField] float _moveSpeed;
 
@@ -60,10 +64,14 @@ namespace Gameplay.Controllers
         void OnPressedHit()
         {
             _moving = true;
+            _animator.Play(Animator.StringToHash(AnimRun));
+            _animator.SetBool(Animator.StringToHash(AnimMoving), true);
         }
 
         void OnReleasedHit()
         {
+            //_animator.StopPlayback();
+            _animator.SetBool(Animator.StringToHash(AnimMoving), false);
             _moving = false;
         }
 
