@@ -9,14 +9,13 @@ namespace Gameplay.Objects
         [SerializeField] float _moveSpeed = 0f;
         [SerializeField] Vector3 _initialDirection = Vector3.right;
 
-        Transform _transform;
-
         Vector3 _curDirection = Vector3.right;
         Vector3 _endPosition;
 
-        void Awake()
+        protected override void Awake()
         {
-            _transform = transform;
+            base.Awake();
+
             _curDirection = _initialDirection;
             _endPosition = _transform.position + _curDirection * _moveDistance;
         }

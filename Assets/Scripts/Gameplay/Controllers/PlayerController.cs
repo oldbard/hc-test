@@ -1,5 +1,6 @@
 ﻿using Gameplay.Handlers;
 using Gameplay.Objects;
+using System.Collections;
 using UnityEngine;
 
 namespace Gameplay.Controllers
@@ -10,6 +11,7 @@ namespace Gameplay.Controllers
         const string AnimMoving = "Moving";
         const string AnimDead = "Dead";
         const string AnimDance = "Dance";
+        const string AnimHit = "Hit";
 
         [SerializeField] Animator _animator;
         [SerializeField] InputHandler _inputHandler;
@@ -26,6 +28,7 @@ namespace Gameplay.Controllers
         Vector3 _checkPointPos;
 
         bool _moving;
+        bool _dead;
 
         public Vector3 Position
         {
@@ -82,6 +85,8 @@ namespace Gameplay.Controllers
 
         void StartRunning()
         {
+            if(_dead) return;
+
             _moving = true;
             _animator.Play(Animator.StringToHash(AnimRun));
             _animator.SetBool(Animator.StringToHash(AnimMoving), true);
@@ -89,6 +94,8 @@ namespace Gameplay.Controllers
 
         void StopRunning()
         {
+            if(_dead) return;
+
             _moving = false;
             _animator.SetBool(Animator.StringToHash(AnimMoving), false);
         }
@@ -99,11 +106,15 @@ namespace Gameplay.Controllers
             _targetNodePos = nodePos;
         }
 
-        public void CompletedRun()
+        public void CompletedRun(int winnerId)
         {
             StopRunning();
             UnregisterEvents();
-            _animator.SetTrigger(AnimDance);
+            _animator.SetBool(Animator.StringToHash(winnerId == _id ? AnimDance : AnimDead), true);
+            if(winnerId != _id)
+            {
+                //_animator.SetInt("", 1);
+            }
         }
 
         void UpdateCheckPointPos()
@@ -128,13 +139,40 @@ namespace Gameplay.Controllers
 
         void OnCollisionEnter(Collision collision)
         {
+            bool wasHit = false;
+
             var collider = collision.collider.GetComponent<Obstacle>();
 
-            if(collider != null)
+            wasHit = collider != null;
+
+            if(!wasHit)
+            {
+                var enemy = collision.collider.GetComponent<PlayerController>();
+
+                wasHit = enemy != null;
+            }
+
+            if(wasHit)
             {
                 Debug.Log("Ops! Hit an obstacle!");
-                _transform.position = _checkPointPos;
+                StartCoroutine(PlayDeath());
             }
+        }
+
+        IEnumerator PlayDeath()
+        {
+            _moving = false;
+            _dead = true;
+
+            _animator.SetTrigger(Animator.StringToHash(AnimHit));
+            _animator.SetBool(Animator.StringToHash(AnimDead), true);
+
+            yield return new WaitForSeconds(2f);
+
+            _animator.SetBool(AnimDead, false);
+
+            _transform.position = _checkPointPos;
+            _dead = false;
         }
     }
 }

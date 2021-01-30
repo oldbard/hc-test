@@ -16,7 +16,7 @@ namespace Gameplay.Controllers
             for (var i = 0; i < _players.Length; i++)
             {
                 var player = _players[i];
-                
+
                 player.Init(i);
                 UpdatePlayerTarget(player);
             }
@@ -24,10 +24,12 @@ namespace Gameplay.Controllers
 
         void Update()
         {
-            if(!_levelIsRunning) return;
+            if (!_levelIsRunning) return;
 
-            foreach(var player in _players)
+            foreach (var player in _players)
             {
+                if (!_levelIsRunning) return;
+
                 UpdatePlayerPath(player);
             }
         }
@@ -40,9 +42,8 @@ namespace Gameplay.Controllers
             {
                 if (_pathManager.IsLastTarget(player.Id))
                 {
-                    _levelIsRunning = false;
                     Debug.Log("Reached destination!");
-                    player.CompletedRun();
+                    EndGame(player.Id);
                 }
                 else
                 {
@@ -55,6 +56,16 @@ namespace Gameplay.Controllers
         void UpdatePlayerTarget(PlayerController player)
         {
             player.SetTargetNode(_pathManager.CurrentTargetPos(player.Id));
+        }
+
+        void EndGame(int winnerId)
+        {
+            _levelIsRunning = false;
+
+            foreach (var player in _players)
+            {
+                player.CompletedRun(winnerId);
+            }
         }
     }
 }
