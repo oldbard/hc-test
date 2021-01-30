@@ -27,13 +27,13 @@ Implemented Obstacles
 5th hour:
 
 Implemented UI. (Without the progress)
+
 Started work on the AI and doc
 
 	I stopped within the 5 given hours.
 
 The parts which were difficult:
 
-	I prepared the InputHadler in a way that I could have used it for the AI.
 	The AI part was difficult because of the lack of time.
 	The animations could have had proper and better transitions. Which I had a proper model ready for this.
 	
