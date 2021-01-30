@@ -72,6 +72,8 @@
     <Compile Include="Assets\Scripts\Gameplay\Objects\BouncyObject.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Objects\Obstacle.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Objects\RotationObject.cs" />
+    <Compile Include="Assets\Scripts\UI\GameOverScreen.cs" />
+    <Compile Include="Assets\Scripts\UI\HUDController.cs" />
     <Compile Include="Assets\Scripts\UI\MainMenuController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/repoNew/hc-test/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

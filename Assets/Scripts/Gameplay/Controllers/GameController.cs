@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Gameplay.Controllers
 {
@@ -7,6 +8,8 @@ namespace Gameplay.Controllers
         [SerializeField] PlayerController[] _players;
         [SerializeField] PathManager _pathManager;
         [SerializeField] float _distanceToChangeNode = 0.3f;
+
+        public Action<bool> GameOver;
 
         bool _levelIsRunning;
 
@@ -66,6 +69,8 @@ namespace Gameplay.Controllers
             {
                 player.CompletedRun(winnerId);
             }
+
+            GameOver?.Invoke(winnerId == 1);
         }
     }
 }
