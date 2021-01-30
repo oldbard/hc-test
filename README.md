@@ -6,27 +6,27 @@ The time it took me to finish the exercise:
 
 1st hour:
 
-Analyzed game / Draw plans.
-Got Assets.
-Created project.
-Imported Assets.
+	Analyzed game / Draw plans.
+	Got Assets.
+	Created project.
+	Imported Assets.
 
 2nd hour:
 
-Set up Collision.
-Uploaded basic functionality.
+	Set up Collision.
+	Uploaded basic functionality.
 
 3rd hour:
 
-Fixed / prepared character
+	Fixed / prepared character
 
 4th hour:
 
-Implemented Obstacles
+	Implemented Obstacles
 
 5th hour:
 
-Implemented UI. (Without the progress)
+	Implemented UI. (Without the map progression)
 
 Started work on the AI and doc
 
