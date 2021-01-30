@@ -9,39 +9,59 @@ namespace Gameplay.Controllers
         class PathNodes
         {
             [SerializeField] Transform[] _nodes;
+            int _currentTarget;
+
+            public int CurrentTarget
+            {
+                get => _currentTarget;
+            }
 
             public int Length
             {
                 get => _nodes.Length;
             }
 
-            public Transform GetNode(int id)
+            public bool IsLastTarget
             {
-                return _nodes[id];
+                get => _currentTarget == _nodes.Length - 1;
+            }
+
+            public void SkipToNextTarget()
+            {
+                _currentTarget++;
+                if (_currentTarget >= _nodes.Length)
+                {
+                    throw new Exception("Ops! Level should have ended!");
+                }
+            }
+
+            public Transform GetNode()
+            {
+                return _nodes[_currentTarget];
+            }
+
+            public Transform GetNode(int idx)
+            {
+                return _nodes[idx];
             }
         }
 
         [SerializeField] PathNodes[] _pathNodes;
 
-        int[] _currentTarget = new int[2];
 
         public Vector3 CurrentTargetPos(int playerId)
         {
-            return _pathNodes[playerId].GetNode(_currentTarget[playerId]).position;
+            return _pathNodes[playerId].GetNode().position;
         }
 
         public bool IsLastTarget(int playerId)
         {
-            return _currentTarget[playerId] == _pathNodes[playerId].Length - 1;
+            return _pathNodes[playerId].IsLastTarget;
         }
 
         public void SkipToNextTarget(int playerId)
         {
-            _currentTarget[playerId]++;
-            if (_currentTarget[playerId] >= _pathNodes[playerId].Length)
-            {
-                throw new System.Exception("Ops! Level should have ended!");
-            }
+            _pathNodes[playerId].SkipToNextTarget();
         }
 
         void OnDrawGizmos()
@@ -55,7 +75,7 @@ namespace Gameplay.Controllers
                 for(var j = 0; j < playerNodes.Length; j++)
                 {
                     var node = playerNodes.GetNode(j);
-                    Gizmos.color = j == _currentTarget[i] ? Color.green : Color.blue;
+                    Gizmos.color = j == playerNodes.CurrentTarget ? Color.green : Color.blue;
                     Gizmos.DrawSphere(node.transform.position, 1f);
                 }
             }
