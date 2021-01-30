@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Gameplay\Controllers\FollowCameraController.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Controllers\GameController.cs" />
+    <Compile Include="Assets\Scripts\Gameplay\Controllers\InputRecorder.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Controllers\PathManager.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Controllers\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Gameplay\Handlers\InputHandler.cs" />

@@ -18,7 +18,6 @@ namespace Gameplay.UI
         void Awake()
         {
             _gameController.GameOver += OnGameOver;
-            //_endGameScreen.ContinueClicked += OnContinue;
             _inputHandler.PressedHit += OnPressedHit;
             _inputHandler.ReleasedHit += OnReleasedHit;
         }
@@ -26,7 +25,6 @@ namespace Gameplay.UI
         void OnDestroy()
         {
             _gameController.GameOver -= OnGameOver;
-            //_endGameScreen.ContinueClicked -= OnContinue;
             _inputHandler.PressedHit -= OnPressedHit;
             _inputHandler.ReleasedHit -= OnReleasedHit;
         }
