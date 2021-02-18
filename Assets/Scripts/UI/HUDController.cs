@@ -1,5 +1,5 @@
 ﻿using Gameplay.Controllers;
-using Gameplay.Handlers;
+using Gameplay.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,7 +9,7 @@ namespace Gameplay.UI
     public class HUDController : MonoBehaviour
     {
         [SerializeField] GameController _gameController;
-        [SerializeField] InputHandler _inputHandler;
+        [SerializeField] InputDispatcher _inputHandler;
         [SerializeField] GameOverScreen _endGameScreen;
         [SerializeField] Text tapToMoveText;
 

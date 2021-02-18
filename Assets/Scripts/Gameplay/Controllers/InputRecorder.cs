@@ -1,30 +1,67 @@
-﻿using Gameplay.Handlers;
+﻿using Gameplay.Input;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gameplay.Controllers
 {
+    [Serializable]
+    public class InputData
+    {
+        public List<InputDataStep> Steps = new List<InputDataStep>();
+        public int Level;
+
+        public InputData(int level)
+        {
+            Level = level;
+        }
+
+        public void AddStep(InputDataStep step)
+        {
+            Steps.Add(step);
+        }
+
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    [Serializable]
+    public class InputDataStep
+    {
+        public int SecondsToStart;
+        public int SecondsToEnd;
+    }
+
     public class InputRecorder : MonoBehaviour
     {
-        [SerializeField] InputHandler _inputHandler;
-//        [SerializeField] GameController _gameController;
+        [SerializeField] InputDispatcher _inputHandler;
+        [SerializeField] GameController _gameController;
 
-        int _levelId;
-        int _inputId;
-        int _totalInputs = 0;
+        InputData _inputData;
+        InputDataStep _currentStep;
 
-        DateTime _startTime;
-
+        DateTime _noInputsStartTime;
         DateTime _currentPressStart;
-        double _timeSinceStart;
+
+        bool _savingStep;
+
+        void Start()
+        {
+            StartRecording(1);
+        }
 
         public void StartRecording(int levelId)
         {
-            _levelId = levelId;
-            _startTime = DateTime.UtcNow;
+            Debug.Log("Started Recording");
+            _inputData = new InputData(levelId);
+
+            _noInputsStartTime = DateTime.UtcNow;
 
             _inputHandler.PressedHit += OnPressedHit;
             _inputHandler.ReleasedHit += OnReleasedHit;
+            _gameController.GameOver += OnGameOver;
         }
 
         public void FinishRecording()
@@ -32,28 +69,58 @@ namespace Gameplay.Controllers
             _inputHandler.PressedHit -= OnPressedHit;
             _inputHandler.ReleasedHit -= OnReleasedHit;
 
-            PlayerPrefs.SetInt($"TotalInputs{_levelId}", _totalInputs);
+            var json = _inputData.ToJson();
+            Debug.Log(json);
 
-            PlayerPrefs.Save();
+            var filePath = $"{Application.persistentDataPath}/level{_inputData.Level}.json";
+            var outStream = System.IO.File.CreateText(filePath);
+            outStream.WriteLine(json);
+            outStream.Close();
+        }
+
+        void StartStep()
+        {
+            _savingStep = true;
+
+            _currentStep = new InputDataStep();
+            _currentPressStart = DateTime.UtcNow;
+            _currentStep.SecondsToStart = (int)(_currentPressStart - _noInputsStartTime).TotalMilliseconds;
+        }
+
+        void EndStep()
+        {
+            _savingStep = false;
+
+            _noInputsStartTime = DateTime.UtcNow;
+            _currentStep.SecondsToEnd = (int)(_noInputsStartTime - _currentPressStart).TotalMilliseconds;
+            _inputData.AddStep(_currentStep);
         }
 
         void OnPressedHit()
         {
-            _currentPressStart = DateTime.UtcNow;
-            _timeSinceStart = (DateTime.UtcNow - _startTime).TotalSeconds;
-            PlayerPrefs.SetString($"Input{_levelId}_{_totalInputs}_started", _timeSinceStart.ToString());
+            Debug.Log("OnPressedHit");
 
-            PlayerPrefs.Save();
+            StartStep();
         }
 
         void OnReleasedHit()
         {
-            var timePressed = (DateTime.UtcNow - _currentPressStart).TotalSeconds;
+            Debug.Log("OnReleasedHit");
 
-            PlayerPrefs.SetString($"Input{_levelId}_{_totalInputs}_duration", timePressed.ToString());
-            PlayerPrefs.Save();
+            EndStep();
+        }
 
-            _totalInputs++;
+        void OnGameOver(bool winner)
+        {
+            Debug.Log("OnGameOver");
+            _gameController.GameOver -= OnGameOver;
+
+            if(_savingStep)
+            {
+                EndStep();
+            }
+            
+            FinishRecording();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Gameplay.Handlers;
+﻿using Gameplay.Input;
 using Gameplay.Objects;
 using System.Collections;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace Gameplay.Controllers
         const string AnimHit = "Hit";
 
         [SerializeField] Animator _animator;
-        [SerializeField] InputHandler _inputHandler;
+        [SerializeField] InputDispatcher _inputHandler;
         [SerializeField] float _moveSpeed;
 
         int _id;
